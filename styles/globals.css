@@ -14,3 +14,18 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.linkStyle {
+  margin-right: 20px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.navStyle {
+  display: flex;
+  padding: 30px;
+  border-bottom: 1px solid #ddd;
+}
+
+:root {
+}
