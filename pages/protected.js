@@ -1,37 +1,23 @@
 import { withSSRContext } from 'aws-amplify'
+import {getAuthenticatedServerSideProps} from "../src/auth/getAuthenticatedServerSideProps";
 
-function Protected({ authenticated, username }) {
+function Protected({ authenticated, user, title }) {
   if (!authenticated) {
     return <h1>Not authenticated</h1>
   }
-  return <h1>Hello {username} from SSR route!</h1>
+  return <h1>Hello {user.username} from SSR route! props.title is {title}</h1>
 }
 
-export async function getServerSideProps({ req, res }) {
-  const { Auth } = withSSRContext({ req })
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-    console.log('user: ', user)
-    return {
-      props: {
-        authenticated: true,
-        username: user.username
-      }
-    }
-  } catch (err) {
-    console.log('error, user not authenticated')
+export async function getServerSideProps(context) {
+    let res = await getAuthenticatedServerSideProps(context); // sets res.props.authenticated and res.props.user (if authenticated)
 
-    // SSR redirect
-    res.writeHead(302, { Location: '/profile' });
-    res.end();
-    // non-SSR-redirect
-    // return {
-    //   props: {
-    //     authenticated: false
-    //   }
-    // }
-  }
-  return {props: {}}
+    if (res.authenticated) {
+        // add any other props, eg. fetching data from a backend
+        res.props.title = 'example';
+        console.log("res ==>", res)
+    }
+
+    return res;
 }
 
 export default Protected

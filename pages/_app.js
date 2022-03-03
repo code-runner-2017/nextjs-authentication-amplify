@@ -1,7 +1,5 @@
 import '../styles/globals.css';
 import Link from 'next/link';
-// import { css } from 'emotion';
-
 import Amplify from 'aws-amplify';
 import config from '../src/aws-exports';
 
